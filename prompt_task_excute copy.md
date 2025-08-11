@@ -26,5 +26,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `https://vercel.com/templates/next.js/nextjs-ai-chatbot`
 - **PLAN_OVERVIEW**: `docs\plans\04_openai_migration_implementation\01_overview.md`
-- **MAIN_TASK_FILE**: `docs\plans\04_openai_migration_implementation\02_task_03_install-openai-provider.md`
+- **MAIN_TASK_FILE**: `docs\plans\04_openai_migration_implementation\02_task_05_update-provider-configuration.md`
 - **SUB_TASK_**: `**The Entire Sub-tasks in ${MAIN_TASK_FILE} file**`
