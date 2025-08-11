@@ -12,7 +12,7 @@
     - 2.3. **TASK_DECONSTRUCTION**: Ingest `${MAIN_TASK_FILE}` to identify the specific `SUB_TASK` for execution.
     - 2.4. **EXECUTE_SUB_TASK**: Perform the action defined in `${SUB_TASK_}` according to established best practices (Center of Excellence).
     - 2.5. **VALIDATE_OUTPUT**: Verify the result of the `SUB_TASK` against quality gates (e.g., Linting, OOP, DRY, YAGNI, SRP). Await user confirmation to proceed.
-    - 2.6. Mark completed sub-tasks as [x] done.
+    - 2.6. UPDATE {MAIN_TASK_FILE} completed sub-tasks as [x] done.
 
 ## ERROR_HANDLING_PROTOCOL
 
@@ -26,5 +26,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `https://vercel.com/templates/next.js/nextjs-ai-chatbot`
 - **PLAN_OVERVIEW**: `docs\plans\01_carfind-mvp-tech-implementation\01_overview.md`
-- **MAIN_TASK_FILE**: `docs\plans\01_carfind-mvp-tech-implementation\02_task_02_template-deployment.md`
+- **MAIN_TASK_FILE**: `docs/plans/01_carfind-mvp-tech-implementation/02_task_04_template-validation.md`
 - **SUB_TASK_**: `**The Entire Sub-tasks in ${MAIN_TASK_FILE} file**`

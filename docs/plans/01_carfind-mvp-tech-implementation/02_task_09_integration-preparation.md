@@ -171,13 +171,13 @@ Comprehensive documentation of all integration points, service abstractions, and
 
     ### Current Data Flow
 
-    ```
+    ```markdown
     User Input → Chat API → AI SDK Tools → CarSearchService → Mock Data
     ```
 
     ### Future SK Process Data Flow
 
-    ```
+    ```markdown
     User Input → SK Process → SK Steps → SK Functions → Real Database
     ```
 
@@ -197,7 +197,7 @@ Comprehensive documentation of all integration points, service abstractions, and
     3. **Mock Data**: Integrate with real car databases
     4. **Static Tool Integration**: Dynamic SK Process-based tool management
 
-    ```
+    ```markdown
 
 - [ ] **Sub-Task 2: Service Interface Documentation**
   - **Description:** Document service layer patterns for SK integration
@@ -314,7 +314,7 @@ Comprehensive documentation of all integration points, service abstractions, and
                         │   (Mock Data)           │
                         └─────────────────────────┘
 
-    ```
+    ```markdown
 
     ### SOLID Principles Implementation
     - **SRP**: Each service has single responsibility
