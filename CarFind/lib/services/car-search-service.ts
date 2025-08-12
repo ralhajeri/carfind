@@ -1,6 +1,6 @@
 // File Path: CarFind/lib/services/car-search-service.ts
 // SOLID: Single Responsibility Principle - Car Search Operations
-import { Car, CarSearchCriteria, CarSearchResult } from '../types/car';
+import type { Car, CarSearchCriteria, CarSearchResult } from '../types/car';
 import { MOCK_CARS } from '../data/mock-cars';
 
 export class CarSearchService {
@@ -21,37 +21,42 @@ export class CarSearchService {
         // Filter by make
         if (criteria.make) {
             filteredCars = filteredCars.filter(car =>
-                car.make.toLowerCase().includes(criteria.make!.toLowerCase())
+                car.make.toLowerCase().includes(criteria.make?.toLowerCase() || '')
             );
         }
 
         // Filter by model
         if (criteria.model) {
             filteredCars = filteredCars.filter(car =>
-                car.model.toLowerCase().includes(criteria.model!.toLowerCase())
+                car.model.toLowerCase().includes(criteria.model?.toLowerCase() || '')
             );
         }
 
         // Filter by price range
-        if (criteria.minPrice) {
-            filteredCars = filteredCars.filter(car => car.price >= criteria.minPrice!);
+        if (criteria.minPrice !== undefined) {
+            const minPrice = criteria.minPrice;
+            filteredCars = filteredCars.filter(car => car.price >= minPrice);
         }
-        if (criteria.maxPrice) {
-            filteredCars = filteredCars.filter(car => car.price <= criteria.maxPrice!);
+        if (criteria.maxPrice !== undefined) {
+            const maxPrice = criteria.maxPrice;
+            filteredCars = filteredCars.filter(car => car.price <= maxPrice);
         }
 
         // Filter by year range
-        if (criteria.minYear) {
-            filteredCars = filteredCars.filter(car => car.year >= criteria.minYear!);
+        if (criteria.minYear !== undefined) {
+            const minYear = criteria.minYear;
+            filteredCars = filteredCars.filter(car => car.year >= minYear);
         }
-        if (criteria.maxYear) {
-            filteredCars = filteredCars.filter(car => car.year <= criteria.maxYear!);
+        if (criteria.maxYear !== undefined) {
+            const maxYear = criteria.maxYear;
+            filteredCars = filteredCars.filter(car => car.year <= maxYear);
         }
 
         // Filter by mileage
-        if (criteria.maxMileage) {
+        if (criteria.maxMileage !== undefined) {
+            const maxMileage = criteria.maxMileage;
             filteredCars = filteredCars.filter(car =>
-                (car.mileage || 0) <= criteria.maxMileage!
+                (car.mileage || 0) <= maxMileage
             );
         }
 

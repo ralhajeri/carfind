@@ -15,6 +15,7 @@
     - 2.6. **MUST** UPDATE {MAIN_TASK_FILE} completed sub-tasks as [x] done.
     - 2.7. **MUST** CREATE the implementation report
     - 2.8. **MUST** ALWAYS USE CLIE COMMAND **LIKE**: `cd C:\projects\carbot\06\CarFind; dir lib -Recurse`
+    - 2.7. **MUST** LOG ISSUES IN RELATED TASK FILE IF ISSUES DETECTED DURING THE IMPLEMENTATION -> TABLE
 
 ## ERROR_HANDLING_PROTOCOL
 
@@ -28,5 +29,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `https://vercel.com/templates/next.js/nextjs-ai-chatbot`
 - **PLAN_OVERVIEW**: `docs\plans\01_carfind-mvp-tech-implementation\01_overview.md`
-- **MAIN_TASK_FILE**: `docs\plans\01_carfind-mvp-tech-implementation\02_task_06_tool-implementation.md`
-- **SUB_TASK_**: `**Sub-Task 1: Car Search Tool Implementation**`
+- **MAIN_TASK_FILE**: `docs/plans/01_carfind-mvp-tech-implementation/02_task_07_api-integration.md`
+- **SUB_TASK_**: `**Sub-Task 1: API Route Enhancement**`

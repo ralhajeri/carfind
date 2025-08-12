@@ -7,7 +7,7 @@ import {
   streamText,
 } from 'ai';
 import { auth, type UserType } from '@/app/(auth)/auth';
-import { type RequestHints, systemPrompt } from '@/lib/ai/prompts';
+import type { RequestHints, } from '@/lib/ai/prompts';
 import {
   createStreamId,
   deleteChatById,
@@ -19,10 +19,8 @@ import {
 } from '@/lib/db/queries';
 import { convertToUIMessages, generateUUID } from '@/lib/utils';
 import { generateTitleFromUserMessage } from '../../actions';
-import { createDocument } from '@/lib/ai/tools/create-document';
-import { updateDocument } from '@/lib/ai/tools/update-document';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
-import { getWeather } from '@/lib/ai/tools/get-weather';
+// Removed unused template tool imports - using carTools instead
+import { carTools } from '@/lib/tools';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
@@ -153,27 +151,35 @@ export async function POST(request: Request) {
       execute: ({ writer: dataStream }) => {
         const result = streamText({
           model: myProvider.languageModel(selectedChatModel),
-          system: systemPrompt({ selectedChatModel, requestHints }),
+          system: `You are CarFind, an AI assistant specialized in helping users find the perfect car.
+          
+          Your capabilities:
+          - Search for cars by make, model, price range, year, and other criteria
+          - Provide detailed information about specific cars
+          - Offer personalized car recommendations based on user needs
+          - Help users understand car features, pricing, and comparisons
+          
+          Always be helpful, informative, and conversational. When users ask about cars:
+          1. Use the searchCars tool for general car searches
+          2. Use the getCarDetails tool for specific car information
+          3. Use the getRecommendations tool for personalized advice
+          
+          Present car information in a clear, organized way and always ask follow-up questions to better understand user needs.`,
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(5),
           experimental_activeTools:
             selectedChatModel === 'chat-model-reasoning'
               ? []
               : [
-                  'getWeather',
-                  'createDocument',
-                  'updateDocument',
-                  'requestSuggestions',
+                  'searchCars',
+                  'getCarDetails',
+                  'getRecommendations',
                 ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
-            getWeather,
-            createDocument: createDocument({ session, dataStream }),
-            updateDocument: updateDocument({ session, dataStream }),
-            requestSuggestions: requestSuggestions({
-              session,
-              dataStream,
-            }),
+            searchCars: carTools.searchCars,
+            getCarDetails: carTools.getCarDetails,
+            getRecommendations: carTools.getRecommendations,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,

@@ -3,7 +3,7 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import { carSearchService } from '../services/car-search-service';
-import { CarSearchCriteria } from '../types/car';
+import type { CarSearchCriteria } from '../types/car';
 
 export const carSearchTool = tool({
     description: 'Search for cars based on specific criteria like make, model, price range, and year. Use this when users want to find cars matching their requirements.',

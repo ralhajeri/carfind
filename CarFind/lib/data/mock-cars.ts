@@ -1,6 +1,6 @@
 // File Path: CarFind/lib/data/mock-cars.ts
 // Mock car data for MVP development
-import { Car } from '../types/car';
+import type { Car } from '../types/car';
 
 export const MOCK_CARS: Car[] = [
     {
