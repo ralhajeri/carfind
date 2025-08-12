@@ -36,7 +36,7 @@ This checklist confirms that all prerequisites are met before starting implement
 - [ ] API integration (TASK-07) has been completed successfully
 - [ ] CarFind application is running locally without errors
 - [ ] All car search tools are integrated and functional
-- [ ] OpenAI API is configured and responding
+- [ ] OpenAI API is configured and responding <!-- NOTE THE SUPABASE  @supabase/supabase-js IN TASK: docs\plans\02_carfind-phase2-integration-layer\02_task_04_supabase-package-installation.md -->
 - [ ] Browser developer tools are available for testing
 
 ## 4. Current Framework Integration Points
