@@ -25,6 +25,7 @@ import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
 import { postRequestBodySchema, type PostRequestBody } from './schema';
+import { CAR_ASSISTANT_SYSTEM_PROMPT } from '@/lib/prompts/car-assistant-prompt';
 import { geolocation } from '@vercel/functions';
 import {
   createResumableStreamContext,
@@ -35,6 +36,45 @@ import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
 import type { VisibilityType } from '@/components/visibility-selector';
+
+// Enhanced error handling utilities for car search integration
+function validateCarToolsAvailability() {
+  const requiredTools = ['searchCars', 'getCarDetails', 'getRecommendations'];
+  const availableTools = Object.keys(carTools);
+
+  const missingTools = requiredTools.filter(tool => !availableTools.includes(tool));
+
+  if (missingTools.length > 0) {
+    throw new Error(`Missing required car search tools: ${missingTools.join(', ')}`);
+  }
+
+  return true;
+}
+
+function logCarToolError(toolName: string, error: any, context?: any) {
+  console.error(`🚨 Car Tool Error [${toolName}]:`, {
+    error: error.message || error,
+    stack: error.stack,
+    context,
+    timestamp: new Date().toISOString()
+  });
+}
+
+function createCarSearchErrorMessage(error: any): string {
+  if (error.message?.includes('car search')) {
+    return "I'm having trouble searching for cars right now. Please try rephrasing your request or try again in a moment.";
+  }
+
+  if (error.message?.includes('car details')) {
+    return "I couldn't retrieve the details for that specific car. Please try searching for cars first or provide a different car ID.";
+  }
+
+  if (error.message?.includes('recommendations')) {
+    return "I'm having difficulty generating car recommendations at the moment. Please try describing your needs differently.";
+  }
+
+  return "I encountered an issue while helping you find cars. Please try again or rephrase your request.";
+}
 
 export const maxDuration = 60;
 
@@ -66,11 +106,15 @@ export async function POST(request: Request) {
   try {
     const json = await request.json();
     requestBody = postRequestBodySchema.parse(json);
-  } catch (_) {
-    return new ChatSDKError('bad_request:api').toResponse();
+  } catch (error) {
+    console.error('Invalid request body:', error);
+    return new ChatSDKError('bad_request:api', 'Invalid request format. Please check your message data.').toResponse();
   }
 
   try {
+    // Validate car tools availability before processing
+    validateCarToolsAvailability();
+
     const {
       id,
       message,
@@ -82,6 +126,15 @@ export async function POST(request: Request) {
       selectedChatModel: ChatModel['id'];
       selectedVisibilityType: VisibilityType;
     } = requestBody;
+
+    // Enhanced validation for car search context
+    if (!id || typeof id !== 'string') {
+      return new ChatSDKError('bad_request:api', 'Invalid chat ID provided.').toResponse();
+    }
+
+    if (!message || !message.parts || message.parts.length === 0) {
+      return new ChatSDKError('bad_request:api', 'Empty message content is not allowed.').toResponse();
+    }
 
     const session = await auth();
 
@@ -149,67 +202,84 @@ export async function POST(request: Request) {
 
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
-        const result = streamText({
-          model: myProvider.languageModel(selectedChatModel),
-          system: `You are CarFind, an AI assistant specialized in helping users find the perfect car.
-          
-          Your capabilities:
-          - Search for cars by make, model, price range, year, and other criteria
-          - Provide detailed information about specific cars
-          - Offer personalized car recommendations based on user needs
-          - Help users understand car features, pricing, and comparisons
-          
-          Always be helpful, informative, and conversational. When users ask about cars:
-          1. Use the searchCars tool for general car searches
-          2. Use the getCarDetails tool for specific car information
-          3. Use the getRecommendations tool for personalized advice
-          
-          Present car information in a clear, organized way and always ask follow-up questions to better understand user needs.`,
-          messages: convertToModelMessages(uiMessages),
-          stopWhen: stepCountIs(5),
-          experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning'
-              ? []
-              : [
-                'searchCars',
-                'getCarDetails',
-                'getRecommendations',
-              ],
-          experimental_transform: smoothStream({ chunking: 'word' }),
-          tools: {
-            searchCars: carTools.searchCars,
-            getCarDetails: carTools.getCarDetails,
-            getRecommendations: carTools.getRecommendations,
-          },
-          experimental_telemetry: {
-            isEnabled: isProductionEnvironment,
-            functionId: 'stream-text',
-          },
-        });
+        try {
+          const result = streamText({
+            model: myProvider.languageModel(selectedChatModel),
+            system: CAR_ASSISTANT_SYSTEM_PROMPT, // 🔄 CHANGED: Use external prompt file
+            messages: convertToModelMessages(uiMessages),
+            stopWhen: stepCountIs(5),
+            experimental_activeTools:
+              selectedChatModel === 'chat-model-reasoning'
+                ? []
+                : [
+                  'searchCars',
+                  'getCarDetails',
+                  'getRecommendations',
+                ],
+            experimental_transform: smoothStream({ chunking: 'word' }),
+            tools: {
+              searchCars: carTools.searchCars,
+              getCarDetails: carTools.getCarDetails,
+              getRecommendations: carTools.getRecommendations,
+            },
+            experimental_telemetry: {
+              isEnabled: isProductionEnvironment,
+              functionId: 'stream-text',
+            },
+            onError: (error) => {
+              // Enhanced error handling for car search tool failures
+              logCarToolError('StreamText', error.error, { chatId: id, userId: session.user.id });
 
-        result.consumeStream();
+              const errorMessage = error.error as any;
+              if (errorMessage?.message?.includes('tool')) {
+                console.error('Car tool execution failed:', errorMessage);
+              }
 
-        dataStream.merge(
-          result.toUIMessageStream({
-            sendReasoning: true,
-          }),
-        );
+              // Return void as expected by the callback
+            },
+          });
+
+          result.consumeStream();
+
+          dataStream.merge(
+            result.toUIMessageStream({
+              sendReasoning: true,
+            }),
+          );
+        } catch (toolError) {
+          // Handle tool-specific errors
+          logCarToolError('ToolExecution', toolError, { chatId: id });
+
+          // Create a fallback response for tool failures
+          console.error('Car search tool execution failed, providing fallback message');
+        }
       },
       generateId: generateUUID,
       onFinish: async ({ messages }) => {
-        await saveMessages({
-          messages: messages.map((message) => ({
-            id: message.id,
-            role: message.role,
-            parts: message.parts,
-            createdAt: new Date(),
-            attachments: [],
-            chatId: id,
-          })),
-        });
+        try {
+          await saveMessages({
+            messages: messages.map((message) => ({
+              id: message.id,
+              role: message.role,
+              parts: message.parts,
+              createdAt: new Date(),
+              attachments: [],
+              chatId: id,
+            })),
+          });
+          console.log(`✅ Successfully saved ${messages.length} messages for chat ${id}`);
+        } catch (saveError) {
+          // Don't fail the response if message saving fails
+          console.error('Failed to save messages to database:', saveError);
+          logCarToolError('MessageSaving', saveError, { chatId: id, messageCount: messages.length });
+        }
       },
-      onError: () => {
-        return 'Oops, an error occurred!';
+      onError: (error) => {
+        // Enhanced error handling for car search integration
+        const errorMessage = createCarSearchErrorMessage(error);
+        console.error('Chat stream error:', error);
+        logCarToolError('ChatStream', error, { chatId: id });
+        return errorMessage;
       },
     });
 
@@ -225,9 +295,38 @@ export async function POST(request: Request) {
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
     }
   } catch (error) {
+    console.error('Chat API error:', error);
+    logCarToolError('ChatAPI', error, { timestamp: new Date().toISOString() });
+
     if (error instanceof ChatSDKError) {
       return error.toResponse();
     }
+
+    // Enhanced error response for unknown errors
+    if (error instanceof Error) {
+      const errorMessage = error.message.includes('car')
+        ? createCarSearchErrorMessage(error)
+        : 'An unexpected error occurred. Please try again.';
+
+      return new Response(
+        JSON.stringify({ error: errorMessage }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    // Fallback for any other error types
+    return new Response(
+      JSON.stringify({
+        error: 'An unexpected error occurred while processing your car search request. Please try again.'
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }
 
