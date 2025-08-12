@@ -171,10 +171,10 @@ export async function POST(request: Request) {
             selectedChatModel === 'chat-model-reasoning'
               ? []
               : [
-                  'searchCars',
-                  'getCarDetails',
-                  'getRecommendations',
-                ],
+                'searchCars',
+                'getCarDetails',
+                'getRecommendations',
+              ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
             searchCars: carTools.searchCars,
