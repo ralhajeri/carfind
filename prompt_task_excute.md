@@ -15,7 +15,19 @@
     - 2.6. **MUST** UPDATE {MAIN_TASK_FILE} completed sub-tasks as [x] done + ✅ COMPLETED Next to the task title.
     - 2.7. **MUST** CREATE the implementation report
     - 2.8. **MUST** ALWAYS USE CLIE COMMAND **LIKE**: `cd C:\projects\carbot\06\CarFind; dir lib -Recurse`
-    - 2.7. **MUST** LOG ISSUES IN RELATED TASK FILE IF ISSUES DETECTED DURING THE IMPLEMENTATION -> TABLE
+    - 2.9. **ISSUE_LOGGING_PROTOCOL (MANDATORY_ENFORCEMENT)**:
+        - **A. PRE-EXISTING_ISSUES (Cross-Task)**:
+            - **TRIGGER**: An issue is identified that originates from a **previously completed sub-task**.
+            - **ACTION (MUST_PERFORM)**:
+                1. Navigate to the `02_task_...md` file corresponding to the source of the issue.
+                2. Append an `## Identified Issues` section if one does not exist.
+                3. Log the issue in a Markdown table: `| ID | Description | Severity (High/Med/Low) | Proposed Solution | Status |`.
+                4. Set `Status` to `Reported`.
+        - **B. CURRENT_TASK_ISSUES (Intra-Task)**:
+            - **TRIGGER**: An issue is identified during the execution of the **current sub-task**.
+            - **ACTION (MUST_PERFORM)**:
+                1. Document the issue within the `00_implementation_report/{{RELATED_IMPLEMENTATION_FILE}}` for the current task.
+                2. Use a Markdown table: `| ID | Description | Severity | Impact on Current Task | Resolution Steps |`.
 
 ## ERROR_HANDLING_PROTOCOL
 
@@ -30,4 +42,4 @@
 - **PLAN_SUPPORT_DOCS**: `https://vercel.com/templates/next.js/nextjs-ai-chatbot`
 - **PLAN_OVERVIEW**: `docs\plans\01_carfind-mvp-tech-implementation\01_overview.md`
 - **MAIN_TASK_FILE**: `docs/plans/01_carfind-mvp-tech-implementation/02_task_08_functional-testing.md`
-- **SUB_TASK_**: `Sub-Task 2: Car Search Functionality Testing (REQ-002)`
+- **SUB_TASK_**: `**Sub-Task 1: API Integration Points Documentation**`
