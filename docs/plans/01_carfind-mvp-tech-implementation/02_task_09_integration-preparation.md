@@ -197,8 +197,6 @@ Comprehensive documentation of all integration points, service abstractions, and
     3. **Mock Data**: Integrate with real car databases
     4. **Static Tool Integration**: Dynamic SK Process-based tool management
 
-    ```markdown
-
 - [ ] **Sub-Task 2: Service Interface Documentation**
   - **Description:** Document service layer patterns for SK integration
 
@@ -345,30 +343,30 @@ Comprehensive documentation of all integration points, service abstractions, and
                         │   (Real Data)           │
                         └─────────────────────────┘
 
-    ```
-
     ## Migration Strategy
 
     ### Phase 1 → Phase 2 Transition
+
     1. **Preserve UI Layer**: Keep all Next.js components unchanged
     2. **Replace API Layer**: Swap AI SDK with SK Process execution
     3. **Enhance Service Layer**: Upgrade from mock to real data
     4. **Convert Tools**: Transform AI SDK tools to SK KernelFunctions
 
     ### Critical Preservation Points
+
     - Maintain all TypeScript interfaces
     - Preserve service method signatures
     - Keep error handling patterns
     - Maintain response data structures
 
     ### Integration Implementation Steps
+
     1. Create SK Process definition for car search workflow
     2. Implement SK Steps for each major operation
     3. Convert tools to KernelFunctions
     4. Integrate real car database
     5. Replace API route with SK Process execution
     6. Test complete integration maintains UI compatibility
-    ```
 
 - [ ] **Sub-Task 4: Phase 2 Implementation Checklist**
   - **Description:** Create actionable checklist for Phase 2 development
