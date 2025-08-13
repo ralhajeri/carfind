@@ -180,7 +180,7 @@ Create a normalized database schema that efficiently stores chat sessions and me
     CREATE INDEX idx_chat_messages_role ON chat_messages(role);
     ```
 
-- [ ] **Sub-Task 5: Create Database Functions and Triggers**
+- [x] **Sub-Task 5: Create Database Functions and Triggers** ✅ COMPLETED
   - **Description:** Implement automated timestamp updates and utility functions
 
     ```sql
@@ -230,7 +230,7 @@ Create a normalized database schema that efficiently stores chat sessions and me
       EXECUTE FUNCTION update_session_on_message_change();
     ```
 
-- [ ] **Sub-Task 6: Implement Row Level Security Policies**
+- [x] **Sub-Task 6: Implement Row Level Security Policies** ✅ COMPLETED
   - **Description:** Create RLS policies for secure data access
 
     ```sql
@@ -301,7 +301,7 @@ Create a normalized database schema that efficiently stores chat sessions and me
       );
     ```
 
-- [ ] **Sub-Task 7: Create Database Views for Common Queries**
+- [x] **Sub-Task 7: Create Database Views for Common Queries** ✅ COMPLETED
   - **Description:** Create views to simplify common query patterns
 
     ```sql
