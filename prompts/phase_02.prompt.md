@@ -42,5 +42,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `[{https://vercel.com/templates/next.js/nextjs-ai-chatbot}, {https://supabase.com/docs/reference/javascript/start}, {https://learn.microsoft.com/en-us/semantic-kernel/overview/}]`
 - **PLAN_OVERVIEW**: `docs\plans\02_carfind-phase2-integration-layer\01_overview.md`
-- **MAIN_TASK_FILE**: `docs\plans\02_carfind-phase2-integration-layer\02_task_05_database-schema-creation.md`
-- **SUB_TASK_**: `[{**Sub-Task 5: Create Database Functions and Triggers**}, {**Sub-Task 6: Implement Row Level Security Policies**}, {**Sub-Task 7: Create Database Views for Common Queries**}]`
+- **MAIN_TASK_FILE**: `docs/plans/02_carfind-phase2-integration-layer/02_task_07_database-service-layer.md`
+- **SUB_TASK_**: `[**ALL THE SUB TASKS**]`
