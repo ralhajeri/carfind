@@ -42,5 +42,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `[{https://vercel.com/templates/next.js/nextjs-ai-chatbot}, {https://supabase.com/docs/reference/javascript/start}, {https://learn.microsoft.com/en-us/semantic-kernel/overview/}]`
 - **PLAN_OVERVIEW**: `docs\plans\02_carfind-phase2-integration-layer\01_overview.md`
-- **MAIN_TASK_FILE**: `docs\plans\02_carfind-phase2-integration-layer\02_task_04_supabase-package-installation.md`
-- **SUB_TASK_**: `****Sub-Task 3: Install Supabase SSR Package**`
+- **MAIN_TASK_FILE**: `docs\plans\02_carfind-phase2-integration-layer\02_task_05_database-schema-creation.md`
+- **SUB_TASK_**: `**Sub-Task 1: Enable Required Extensions**`
