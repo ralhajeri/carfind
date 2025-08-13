@@ -41,5 +41,5 @@
 - **REPO_INFO**: `README.md`
 - **PLAN_SUPPORT_DOCS**: `https://vercel.com/templates/next.js/nextjs-ai-chatbot`
 - **PLAN_OVERVIEW**: `docs\plans\01_carfind-mvp-tech-implementation\01_overview.md`
-- **MAIN_TASK_FILE**: `docs/plans/01_carfind-mvp-tech-implementation/02_task_08_functional-testing.md`
-- **SUB_TASK_**: `**Sub-Task 1: API Integration Points Documentation**`
+- **MAIN_TASK_FILE**: `docs\plans\01_carfind-mvp-tech-implementation\02_task_09_integration-preparation.md`
+- **SUB_TASK_**: `Sub-Task 4: Phase 2 Implementation Checklist`
