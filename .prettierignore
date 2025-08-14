@@ -1,0 +1,8 @@
+# Ignore YAML frontmatter in markdown files
+*.md
+
+# Ignore specific directories
+node_modules/
+.next/
+dist/
+build/
