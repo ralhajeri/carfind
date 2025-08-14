@@ -8,10 +8,12 @@ console.log('✅ carTools imported successfully:', Object.keys(carTools));
 
 // Test 2: Verify tools have proper structure for AI SDK
 Object.entries(carTools).forEach(([name, tool]) => {
-    console.log(`✅ Tool "${name}" has:`, {
-        hasDescription: !!tool.description,
-        hasExecute: typeof tool.execute === 'function'
-    });
+  console.log(`✅ Tool "${name}" has:`, {
+    hasDescription: !!tool.description,
+    hasExecute: typeof tool.execute === 'function',
+  });
 });
 
-console.log('✅ Route integration test completed - all tools properly structured!');
+console.log(
+  '✅ Route integration test completed - all tools properly structured!',
+);

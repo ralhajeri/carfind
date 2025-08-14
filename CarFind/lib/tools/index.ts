@@ -11,7 +11,7 @@ import { carRecommendationTool } from './car-recommendation-tool';
 
 // Export all tools as a collection for easy API integration
 export const carTools = {
-    searchCars: carSearchTool,
-    getCarDetails: carDetailsTool,
-    getRecommendations: carRecommendationTool
+  searchCars: carSearchTool,
+  getCarDetails: carDetailsTool,
+  getRecommendations: carRecommendationTool,
 };

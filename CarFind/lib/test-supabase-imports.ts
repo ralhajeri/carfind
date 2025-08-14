@@ -14,17 +14,17 @@ console.log('Supabase packages imported successfully');
 
 // Export test function to verify functionality
 export function testSupabaseImports(): boolean {
-    try {
-        // Test that we can reference the createClient function
-        const hasCreateClient = typeof createClient === 'function';
-        const hasCreateBrowserClient = typeof createBrowserClient === 'function';
-        const hasCreateServerClient = typeof createServerClient === 'function';
+  try {
+    // Test that we can reference the createClient function
+    const hasCreateClient = typeof createClient === 'function';
+    const hasCreateBrowserClient = typeof createBrowserClient === 'function';
+    const hasCreateServerClient = typeof createServerClient === 'function';
 
-        return hasCreateClient && hasCreateBrowserClient && hasCreateServerClient;
-    } catch (error) {
-        console.error('Supabase import test failed:', error);
-        return false;
-    }
+    return hasCreateClient && hasCreateBrowserClient && hasCreateServerClient;
+  } catch (error) {
+    console.error('Supabase import test failed:', error);
+    return false;
+  }
 }
 
 // Test types availability
@@ -32,7 +32,9 @@ export type { SupabaseClient, BrowserClient };
 
 // Export a simple validation that can be run
 export const validateSupabaseImports = () => {
-    const result = testSupabaseImports();
-    console.log(`Supabase imports validation: ${result ? '✅ PASSED' : '❌ FAILED'}`);
-    return result;
+  const result = testSupabaseImports();
+  console.log(
+    `Supabase imports validation: ${result ? '✅ PASSED' : '❌ FAILED'}`,
+  );
+  return result;
 };

@@ -7,7 +7,7 @@ import {
   streamText,
 } from 'ai';
 import { auth, type UserType } from '@/app/(auth)/auth';
-import type { RequestHints, } from '@/lib/ai/prompts';
+import type { RequestHints } from '@/lib/ai/prompts';
 import {
   createStreamId,
   deleteChatById,
@@ -42,10 +42,14 @@ function validateCarToolsAvailability() {
   const requiredTools = ['searchCars', 'getCarDetails', 'getRecommendations'];
   const availableTools = Object.keys(carTools);
 
-  const missingTools = requiredTools.filter(tool => !availableTools.includes(tool));
+  const missingTools = requiredTools.filter(
+    (tool) => !availableTools.includes(tool),
+  );
 
   if (missingTools.length > 0) {
-    throw new Error(`Missing required car search tools: ${missingTools.join(', ')}`);
+    throw new Error(
+      `Missing required car search tools: ${missingTools.join(', ')}`,
+    );
   }
 
   return true;
@@ -56,7 +60,7 @@ function logCarToolError(toolName: string, error: any, context?: any) {
     error: error.message || error,
     stack: error.stack,
     context,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -73,7 +77,7 @@ function createCarSearchErrorMessage(error: any): string {
     return "I'm having difficulty generating car recommendations at the moment. Please try describing your needs differently.";
   }
 
-  return "I encountered an issue while helping you find cars. Please try again or rephrase your request.";
+  return 'I encountered an issue while helping you find cars. Please try again or rephrase your request.';
 }
 
 export const maxDuration = 60;
@@ -108,7 +112,10 @@ export async function POST(request: Request) {
     requestBody = postRequestBodySchema.parse(json);
   } catch (error) {
     console.error('Invalid request body:', error);
-    return new ChatSDKError('bad_request:api', 'Invalid request format. Please check your message data.').toResponse();
+    return new ChatSDKError(
+      'bad_request:api',
+      'Invalid request format. Please check your message data.',
+    ).toResponse();
   }
 
   try {
@@ -129,11 +136,17 @@ export async function POST(request: Request) {
 
     // Enhanced validation for car search context
     if (!id || typeof id !== 'string') {
-      return new ChatSDKError('bad_request:api', 'Invalid chat ID provided.').toResponse();
+      return new ChatSDKError(
+        'bad_request:api',
+        'Invalid chat ID provided.',
+      ).toResponse();
     }
 
     if (!message || !message.parts || message.parts.length === 0) {
-      return new ChatSDKError('bad_request:api', 'Empty message content is not allowed.').toResponse();
+      return new ChatSDKError(
+        'bad_request:api',
+        'Empty message content is not allowed.',
+      ).toResponse();
     }
 
     const session = await auth();
@@ -211,11 +224,7 @@ export async function POST(request: Request) {
             experimental_activeTools:
               selectedChatModel === 'chat-model-reasoning'
                 ? []
-                : [
-                  'searchCars',
-                  'getCarDetails',
-                  'getRecommendations',
-                ],
+                : ['searchCars', 'getCarDetails', 'getRecommendations'],
             experimental_transform: smoothStream({ chunking: 'word' }),
             tools: {
               searchCars: carTools.searchCars,
@@ -228,7 +237,10 @@ export async function POST(request: Request) {
             },
             onError: (error) => {
               // Enhanced error handling for car search tool failures
-              logCarToolError('StreamText', error.error, { chatId: id, userId: session.user.id });
+              logCarToolError('StreamText', error.error, {
+                chatId: id,
+                userId: session.user.id,
+              });
 
               const errorMessage = error.error as any;
               if (errorMessage?.message?.includes('tool')) {
@@ -251,7 +263,9 @@ export async function POST(request: Request) {
           logCarToolError('ToolExecution', toolError, { chatId: id });
 
           // Create a fallback response for tool failures
-          console.error('Car search tool execution failed, providing fallback message');
+          console.error(
+            'Car search tool execution failed, providing fallback message',
+          );
         }
       },
       generateId: generateUUID,
@@ -267,11 +281,16 @@ export async function POST(request: Request) {
               chatId: id,
             })),
           });
-          console.log(`✅ Successfully saved ${messages.length} messages for chat ${id}`);
+          console.log(
+            `✅ Successfully saved ${messages.length} messages for chat ${id}`,
+          );
         } catch (saveError) {
           // Don't fail the response if message saving fails
           console.error('Failed to save messages to database:', saveError);
-          logCarToolError('MessageSaving', saveError, { chatId: id, messageCount: messages.length });
+          logCarToolError('MessageSaving', saveError, {
+            chatId: id,
+            messageCount: messages.length,
+          });
         }
       },
       onError: (error) => {
@@ -308,24 +327,22 @@ export async function POST(request: Request) {
         ? createCarSearchErrorMessage(error)
         : 'An unexpected error occurred. Please try again.';
 
-      return new Response(
-        JSON.stringify({ error: errorMessage }),
-        {
-          status: 500,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
+      return new Response(JSON.stringify({ error: errorMessage }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Fallback for any other error types
     return new Response(
       JSON.stringify({
-        error: 'An unexpected error occurred while processing your car search request. Please try again.'
+        error:
+          'An unexpected error occurred while processing your car search request. Please try again.',
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      }
+        headers: { 'Content-Type': 'application/json' },
+      },
     );
   }
 }
