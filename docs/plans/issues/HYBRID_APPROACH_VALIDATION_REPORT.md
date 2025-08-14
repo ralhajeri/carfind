@@ -1,8 +1,6 @@
 # Hybrid Approach Validation Report
 
-**Architectural Decision Record: Next.js + FastAPI Dual-ORM Strategy**
-
----
+## Architectural Decision Record: Next.js + FastAPI Dual-ORM Strategy
 
 ## Document Information
 
