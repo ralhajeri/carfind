@@ -163,7 +163,7 @@ Consider adding your development machine's IP address to the Supabase project's 
 
 #### **Issue 1: Invalid Project URL**
 
-```
+```text
 Error: Invalid Supabase URL
 ```
 
@@ -171,7 +171,7 @@ Error: Invalid Supabase URL
 
 #### **Issue 2: Authentication Errors**
 
-```
+```text
 Error: API key authentication failed
 ```
 
@@ -179,7 +179,7 @@ Error: API key authentication failed
 
 #### **Issue 3: Network Connection Issues**
 
-```
+```text
 Error: ECONNREFUSED
 ```
 
@@ -187,7 +187,7 @@ Error: ECONNREFUSED
 
 #### **Issue 4: Missing Environment Variables**
 
-```
+```text
 Error: Database configuration not available
 ```
 
@@ -218,7 +218,7 @@ Error: Database configuration not available
 
 #### **Critical Path:**
 
-```
+```text
 ENV-001 Resolution → TASK-10 Completion → Phase 3 Readiness
 ```
 
